@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><!-- Insert your title here --></title>
+    <title>Fitch Notation Proof Editor</title>
+    <script src="helper.js"></script>
     <script src="core.js"></script>
+    <script src="data.js"></script>
     <script src="main.js"></script>
 </head>
 <body>
     <form>
-    	<input type="text" id="input">
-    	<input type="button" id="test" value="Test">
+    	<input type="text" size="80" id="expression"><br>
+    	<input type="button" id="premise" value="Add Premise">
+	<input type="button" id="assumption" value="Add Assumption">
     </form>
     <div class="output">
     	<p id="output1">
