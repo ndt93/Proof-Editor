@@ -15,3 +15,11 @@ var builtin_rules = { //Fundamental Logical Rules
                       "DS" : new Rule("Disjunctive Syllogism", ["A v B", "~A"], "~B"),
                     };
 var added_rules = {};
+
+//Constants
+var EXPR_STRING_CLASS_NAME = "expression_string";
+var EXPR_MODIFIER_CLASS_NAME = "expression_modifier";
+var EXPR_ITEM_CLASS_NAME = "expression_content";
+var EXPR_ITEM_SELECTED_CLASS_NAME = "expression_content_selected";
+var EXPR_PREFIX = "expr_";
+var SCOPE_PREFIX = "scope_";
