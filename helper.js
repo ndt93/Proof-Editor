@@ -9,3 +9,14 @@ function arrayInit(value, length) {
 function trim(string) {
     return string.replace(/[\s\n\t]+/g, "");
 }
+
+var tab = "  ";
+function repeat(string, times) {
+    if (times === 0) {
+        return "";
+    } else if (times % 2 === 0) {
+        return repeat(string + string, times / 2);
+    } else {
+        return string + repeat(string, times - 1);
+    }
+}

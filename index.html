@@ -2,20 +2,44 @@
 <html lang="en">
 <head>
     <title>Fitch Notation Proof Editor</title>
+    <link rel="stylesheet" href="app_style.css">
     <script src="helper.js"></script>
     <script src="core.js"></script>
     <script src="data.js"></script>
     <script src="main.js"></script>
 </head>
 <body>
-    <form>
-    	<input type="text" size="80" id="expression"><br>
-    	<input type="button" id="premise" value="Add Premise">
-	<input type="button" id="assumption" value="Add Assumption">
-    </form>
-    <div class="output">
-    	<p id="output1">
-    	</p>
+    <div class="main">
+	<div class="left_pane">
+	<div class="header">
+	    <form class="input">
+		<div class="expression_area">
+		    Proposition <input type="text" id="expression">
+		</div>
+		<input type="button" id="conclude" value="Conclude" disabled="true">
+		<input type="button" id="premise" value="Premise">
+		<input type="button" id="assumption" value="Assumption">
+		<input type="button" id="clear" value="Clear">
+	    </form>
+	</div>
+	<div class="body">
+	    <ol id="scope_0">
+		
+	    </ol>
+	</div>
+	</div>
+	 <div class="right_pane">
+	    <div class="rules">
+		<p class="pane_heading"><strong>Rules</strong></p>
+		<ul id="rules_box">
+		   
+		</ul>
+	    </div>
+	    <div class="messages">
+		<p class="pane_heading"><strong>Messages</strong></p>
+		<p id="message"></p>
+	    </div>
+    </div>
     </div>
 </body>
 </html>

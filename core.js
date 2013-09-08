@@ -1,3 +1,45 @@
+/* Rule function constructor
+ * params: name: String; premises: String Array; conclusion: String
+ */
+function Rule(name, premises, conclusion) {
+    this.name = name;
+    this.premises = [];
+    this.conclusion = trim(conclusion);
+    this.sub_index = []; //index of substition slots in conclusion
+    this.link = {}; //link structure: {variable_name : {premise_tag: var_position_in premise,...},...}
+  
+    this.compile_and_link();
+}
+
+Rule.prototype.compile_and_link = function () {
+        //compile regex for each premise (identified by a unique tag)
+        //and link variable's name in each premise with corresponding matched position
+        for (var i = 0, len = this.premises.length; i < len; i++) {
+            this.premises[i] = compileAndLinkPattern(this.premises[i], this.link, i);
+            this.premises[i].tag = i;
+        }
+        //find index for substitution slot in conclusion
+        var a_conclusion = this.conclusion.split("");
+        for (var i = 0, len = a_conclusion.length, test_pat = /[A-Za-z]/; i < len; i++) {
+            if (test_pat.test(a_conclusion[i])) {
+                this.sub_index.push(i);
+            }
+        }
+    };
+    
+ 
+Rule.prototype.substitute = function (var_map) {
+        var a_conclusion = conclusion.split("");
+        for (var i = 0, len = this.sub_index.length; i < len; i++) {
+            if (var_map[a_conclusion[this.sub_index[i]]]) {
+                a_conclusion[this.sub_index[i]] = var_map[a_conclusion[this.sub_index[i]]];
+            } else {
+                a_conclusion[this.sub_index[i]] = "<variable>";
+            }
+        }
+        return a_conclusion.join("");
+    };
+
 /* Convert a proposition to regex for pattern matching
  * The pattern is identified by a <tag>
  * link the variables position in the compiled pattern to a
@@ -51,6 +93,7 @@ function generateVarMap(taggedMatches, rule) {
     return var_map;
 }
 
+
 /* Match an array of expressions with a Rule object's premises
  * return a variables map for conclusion substituion or null if cannot match
  */
@@ -80,41 +123,30 @@ function matchWithRule(expressions, rule) {
     return generateVarMap(taggedMatches, rule);
 }
 
-/* Rule function constructor
- * params: premises: string array; conclusion: string
+/* Expression object constructor
+ * params: identifier: string;
  */
-function Rule(name, premises, conclusion) {
-    this.name = name;
-    this.premises = [];
-    this.conclusion = trim(conclusion);
-    this.sub_index = []; //index of substition slots in conclusion
-    this.link = {}; //link structure: {variable_name : {premise_tag: var_position_in premise,...},...}
+function Expression(identifier, content, type, rule_name, parentIds) {
+    this.identifier = identifier;
+    this.content = content;
+    this.rule_name = rule_name;
+    this.parentIds = parentIds;
     
-    this.compile_and_link = function () {
-        //compile regex for each premise (identified by a unique tag)
-        //and link variable's name in each premise with corresponding matched position
-        for (var i = 0, len = premises.length; i < len; i++) {
-            this.premises[i] = compileAndLinkPattern(premises[i], this.link, i);
-            this.premises[i].tag = i;
-        }
-        //find index for substitution slot in conclusion
-        var a_conclusion = conclusion.split("");
-        for (var i = 0, len = a_conclusion.length, test_pat = /[A-Za-z]/; i < len; i++) {
-            if (test_pat.test(a_conclusion[i])) {
-                this.sub_index.push(i);
-            }
-        }
-    };
-    
-    this.substitute = function (var_map) {
-        var a_conclusion = conclusion.split("");
-        for (var i = 0, len = this.sub_index.length; i < len; i++) {
-            if (var_map[a_conclusion[this.sub_index[i]]]) {
-                a_conclusion[this.sub_index[i]] = var_map[a_conclusion[this.sub_index[i]]];
-            }
-        }
-        return a_conclusion.join("");
-    };
-    
-    this.compile_and_link();
+    this.scope = identifier.split(".");
+    this.scope.pop();
 }
+
+//check if an expression is in the same scope with another
+//params: scope: number array
+Expression.prototype.isUnder = function (scope) {
+    if (this.scope.length > scope.length) {
+        return false;
+    } else {
+        for (var i = 0, len = this.scope.length; i < len; i++) {
+            if (this.scope[i] != scope[i]) {
+                return false;
+            }
+        }
+    }
+    return true;
+};

@@ -1,0 +1,107 @@
+.main{
+    width:1000px;
+    margin: 0 auto;
+}
+
+.left_pane {
+    float:left;
+    width: 800px;
+}
+
+.right_pane {
+    float: right;
+    width: 180px;
+}
+
+.header{
+    text-align: right;
+}
+
+.header, .body, .header, .expression_area {
+    width: 100%;
+}
+
+#expression {
+    width: 90%;
+}
+
+.body {
+    min-height: 500px;
+    border: 1px solid black;
+    padding-left: 10px;
+    padding-right: 5px;
+    margin-top: 10px;
+}
+
+ol {
+    padding-left: 20px;
+}
+
+.expression_content, .expression_content_selected {
+    display: list-item;
+    border-bottom-style:solid;
+    border-color: #A0A0A3;
+    border-width: thin;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.expression_content_selected {
+    -webkit-box-shadow: 5px 5px 5px 5px rgba(0, 0, 0);
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0);
+}
+
+.expression_content:hover {
+    background-color: #F2F1BF
+}
+
+.expression_string {
+    float: left;
+}
+
+.expression_modifier {
+    float: right;
+    text-align: center;
+    color: white;
+    font-style: bold;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 5px;
+    padding-right: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.Premise {
+    background-color: green;
+}
+
+.Assumption {
+    background-color: orange;
+}
+
+.Rule {
+    background-color: blue; 
+}
+
+.Discharge {
+    background: red;
+}
+
+ul#rules_box {
+    padding: 0px;
+}
+
+ul#rules_box input[type="button"] {
+    display: list-item;
+    padding: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width:100%;
+}
+
+.pane_heading {
+    border-bottom-style:solid;
+    border-color: #A0A0A3;
+    border-width: thin;
+}
