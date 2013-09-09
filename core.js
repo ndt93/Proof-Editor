@@ -51,8 +51,10 @@ function parse(s, depth) {
             }
             out += p; 
         } else if (c == ')') {
-            if (depth) {
+            if (out.length > 0) {
                 return out;
+            } else {
+                depth++;
             }
         } else {
             out += c
