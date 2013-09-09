@@ -17,7 +17,7 @@
     text-align: right;
 }
 
-.header, .body, .header, .expression_area {
+.header, .header, .expression_area {
     width: 100%;
 }
 
@@ -27,6 +27,7 @@
 
 .body {
     min-height: 500px;
+    width: 98%;
     border: 1px solid black;
     padding-left: 10px;
     padding-right: 5px;
@@ -106,4 +107,8 @@ ul#rules_box input[type="button"] {
     border-bottom-style:solid;
     border-color: #A0A0A3;
     border-width: thin;
+}
+
+.footer {
+    text-align: right;
 }

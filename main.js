@@ -4,6 +4,8 @@ var cur_area;
 
 var expressions_list = {};
 
+var undo_button;
+
 function addNewExpression(content, type, rule_name, parentIds) {
     // Create new expression object and add to expressions list
     var scope_id = cur_scope.join(".");
@@ -23,6 +25,11 @@ function addNewExpression(content, type, rule_name, parentIds) {
     expr_mod.className = EXPR_MODIFIER_CLASS_NAME + " " + type;
     expr_el.appendChild(expr_str);
     expr_el.appendChild(expr_mod);
+    
+    if (rule_name == builtin_rules["=>I"].name) {
+        cur_scope_lid = cur_scope.pop() + 1;
+        cur_area = document.getElementById(getPrefixedScopeId(cur_scope));
+    }
     cur_area.appendChild(expr_el);
     
     //Update current scope, line id in case of assumption
@@ -32,21 +39,57 @@ function addNewExpression(content, type, rule_name, parentIds) {
         cur_scope_lid = 1;
         
         var sub_area = document.createElement("ol");
-        sub_area.id = SCOPE_PREFIX + cur_scope.join(".");
+        sub_area.id = getPrefixedScopeId(cur_scope);
         cur_area.appendChild(sub_area);
         cur_area = sub_area;
-    } else if (rule_name == builtin_rules["=>I"].name) {
-        cur_scope_lid = cur_scope.pop() + 1;
-        cur_area = document.getElementById(SCOPE_PREFIX + (cur_scope.join(".") || "0"));
     } else {
         cur_scope_lid++;
     }
+    
+    if ((undo_button.disabled)) {
+        undo_button.disabled = false;
+    }
+}
+
+function getPrefixedScopeId(scope) {
+    return SCOPE_PREFIX + (cur_scope.join(".") || "0");
+}
+
+function getPrefixedExpressionId(scope, line) {
+    var scope_id = scope.join(".");
+    return EXPR_PREFIX + (scope_id ? scope_id + "." : "") + line;
 }
 
 //item: DOM li element
 function toggleSelection(item) {
     item.className = item.className == "expression_content" ?
                     "expression_content_selected" : "expression_content";
+}
+
+function undo() {
+    function removeExpression(scope, line) {
+        var removedExprId = getPrefixedExpressionId(scope, line);
+        delete expressions_list[removedExprId];
+        var removedExpr = document.getElementById(removedExprId);
+        removedExpr.parentNode.removeChild(removedExpr);
+    }
+    
+    if (cur_scope_lid > 1) {
+        cur_scope_lid--;
+        removeExpression(cur_scope, cur_scope_lid);
+        if (cur_scope.length == 0 && cur_scope_lid == 1) {
+            undo_button.disabled = true;
+        }
+    } else if (cur_scope.length > 0) {
+        var removedScopeId = getPrefixedScopeId(cur_scope);
+        var removedScope = document.getElementById(removedScopeId);
+        removedScope.parentNode.removeChild(removedScope);
+        
+        cur_scope_lid = cur_scope.pop();
+        removeExpression(cur_scope, cur_scope_lid);
+        
+        cur_area = document.getElementById(getPrefixedScopeId(cur_scope));
+    }
 }
 
 function init() {
@@ -65,6 +108,7 @@ function setupListeners() {
     var assumption_button = document.getElementById("assumption");
     var clear_button = document.getElementById("clear");
     var conclude_button = document.getElementById("conclude");
+    undo_button = document.getElementById("undo");
     
     var expression = document.getElementById("expression");
     
@@ -98,6 +142,8 @@ function setupListeners() {
             toggleSelection(selection);
         }
     });
+    
+    undo_button.addEventListener("click", undo);
 }
 
 

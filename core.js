@@ -1,7 +1,7 @@
 /* Rule function constructor
  * params: name: String; premises: String Array; conclusion: String
  */
-function Rule(name, premises, conclusion) {
+function Rule(name, premises, conclusion, num_parents) {
     this.name = name;
     this.premises = [];
     this.conclusion = trim(conclusion);
