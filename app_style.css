@@ -17,7 +17,7 @@
     text-align: right;
 }
 
-.header, .header, .expression_area {
+.header, .header, .expression_area, .message {
     width: 100%;
 }
 
@@ -25,13 +25,20 @@
     width: 90%;
 }
 
+#message {
+    color: red;
+    font-style: italic;
+    margin: 2px;
+}
+
 .body {
-    min-height: 500px;
+    height: 500px;
     width: 98%;
     border: 1px solid black;
     padding-left: 10px;
     padding-right: 5px;
     margin-top: 10px;
+    overflow: auto;
 }
 
 ol {
@@ -40,6 +47,7 @@ ol {
 
 .expression_content, .expression_content_selected {
     display: list-item;
+    background-color: white;
     border-bottom-style:solid;
     border-color: #A0A0A3;
     border-width: thin;
@@ -50,6 +58,7 @@ ol {
 }
 
 .expression_content_selected {
+    background-color: #FAB6B8;
     -webkit-box-shadow: 2px 2px 2px #888888;
     box-shadow: 2px 2px 2px #888888;
 }
@@ -66,7 +75,7 @@ ol {
     float: right;
     text-align: center;
     color: white;
-    font-style: bold;
+    font-style: italic;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 5px;
@@ -103,10 +112,16 @@ ul#rules_box input[type="button"] {
     width:100%;
 }
 
+#summary {
+    font-style: italic;
+    color: blue;
+}
+
 .pane_heading {
     border-bottom-style:solid;
     border-color: #A0A0A3;
     border-width: thin;
+    font-weight: bold;
 }
 
 .footer {

@@ -20,3 +20,9 @@ function repeat(string, times) {
         return string + repeat(string, times - 1);
     }
 }
+
+function beautify(string) {
+    var t_string = string.replace(/([v&]|=>)(.)/g, "\$1 \$2");
+    t_string = t_string.replace(/(.)([v&]|=>)/g, "\$1 \$2");
+    return t_string;
+}

@@ -1,9 +1,42 @@
+/* Convert a proposition to regex for pattern matching
+ * The pattern is identified by a <tag>
+ * link the variables position in the compiled pattern to a
+ * variable name in the <link> dictionary
+ */
+function compileAndLinkPattern(pattern_string, link, tag) {
+    var trimmed_pattern = trim(pattern_string);
+    var divided_pattern = trimmed_pattern.split("");
+    
+    var matched_variable_count = 0;
+    var variable_ids = {};
+    for (var i = 0, len = divided_pattern.length, test_pat = /[A-Za-z]/; i < len; i++) {
+        if (test_pat.test(divided_pattern[i])) {
+            if (variable_ids[divided_pattern[i]]) {
+                divided_pattern[i] = "\\" +  variable_ids[divided_pattern[i]];
+            } else {
+                variable_ids[divided_pattern[i]] = ++matched_variable_count;
+                
+                link[divided_pattern[i]] = link[divided_pattern[i]] || {};
+                link[divided_pattern[i]][tag] = matched_variable_count;
+                
+                divided_pattern[i] = "([\\w\\(\\)v&~\\s]+)";
+            }
+        } else if (divided_pattern[i] === '(' || divided_pattern[i] === ')' ||
+                   divided_pattern[i] === '|'){
+            divided_pattern[i] = '\\' + divided_pattern[i];
+        }
+
+    }
+    return new RegExp("^" + divided_pattern.join("") + "$");
+}
+
 /* Rule function constructor
  * params: name: String; premises: String Array; conclusion: String
  */
-function Rule(name, premises, conclusion, num_parents) {
+function Rule(name, premises, conclusion) {
     this.name = name;
-    this.premises = [];
+    this.uncompiled_premises = premises;
+    this.premises = premises.slice(0);
     this.conclusion = trim(conclusion);
     this.sub_index = []; //index of substition slots in conclusion
     this.link = {}; //link structure: {variable_name : {premise_tag: var_position_in premise,...},...}
@@ -29,47 +62,20 @@ Rule.prototype.compile_and_link = function () {
     
  
 Rule.prototype.substitute = function (var_map) {
-        var a_conclusion = conclusion.split("");
+        var a_conclusion = this.conclusion.split("");
         for (var i = 0, len = this.sub_index.length; i < len; i++) {
-            if (var_map[a_conclusion[this.sub_index[i]]]) {
-                a_conclusion[this.sub_index[i]] = var_map[a_conclusion[this.sub_index[i]]];
+            var cur_pos = this.sub_index[i];
+            if (var_map[a_conclusion[cur_pos]]) {
+                a_conclusion[cur_pos] = var_map[a_conclusion[cur_pos]];
+                if (/[v&~]|(=>)(|-)/.test(a_conclusion[cur_pos])) {
+                    a_conclusion[cur_pos] = "(" + a_conclusion[cur_pos] + ")";
+                }
             } else {
-                a_conclusion[this.sub_index[i]] = "<variable>";
+                a_conclusion[this.sub_index[i]] = "<VAR>";
             }
         }
         return a_conclusion.join("");
     };
-
-/* Convert a proposition to regex for pattern matching
- * The pattern is identified by a <tag>
- * link the variables position in the compiled pattern to a
- * variable name in the <link> dictionary
- */
-function compileAndLinkPattern(pattern_string, link, tag) {
-    var trimmed_pattern = trim(pattern_string);
-    var divided_pattern = trimmed_pattern.split("");
-    
-    var matched_variable_count = 0;
-    var variable_ids = {};
-    for (var i = 0, len = divided_pattern.length, test_pat = /[A-Za-z]/; i < len; i++) {
-        if (test_pat.test(divided_pattern[i])) {
-            if (variable_ids[divided_pattern[i]]) {
-                divided_pattern[i] = "\\" +  variable_ids[divided_pattern[i]];
-            } else {
-                variable_ids[divided_pattern[i]] = ++matched_variable_count;
-                
-                link[divided_pattern[i]] = link[divided_pattern[i]] || {};
-                link[divided_pattern[i]][tag] = matched_variable_count;
-                
-                divided_pattern[i] = "([\\w\\(\\)v&~\\s]+)";
-            }
-        } else if (divided_pattern[i] === '(' || divided_pattern[i] === ')'){
-            divided_pattern[i] = '\\' + divided_pattern[i];
-        }
-
-    }
-    return new RegExp("^" + divided_pattern.join("") + "$");
-}
 
 /* Generate a variable_name -> variable value map
  * from a dictionary of tagged matches' variable values
@@ -133,12 +139,14 @@ function Expression(identifier, content, type, rule_name, parentIds) {
     this.parentIds = parentIds;
     
     this.scope = identifier.split(".");
-    this.scope.pop();
+    if (type != "Assumption") {
+        this.scope.pop();
+    }
 }
 
-//check if an expression is in the same scope with another
+//check if an expression can be seen under a scope
 //params: scope: number array
-Expression.prototype.isUnder = function (scope) {
+Expression.prototype.canBeSeen = function (scope) {
     if (this.scope.length > scope.length) {
         return false;
     } else {
