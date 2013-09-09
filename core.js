@@ -9,7 +9,7 @@ function compileAndLinkPattern(pattern_string, link, tag) {
     
     var matched_variable_count = 0;
     var variable_ids = {};
-    for (var i = 0, len = divided_pattern.length, test_pat = /[A-Za-z]/; i < len; i++) {
+    for (var i = 0, len = divided_pattern.length, test_pat = /[A-Za-uw-z]/; i < len; i++) {
         if (test_pat.test(divided_pattern[i])) {
             if (variable_ids[divided_pattern[i]]) {
                 divided_pattern[i] = "\\" +  variable_ids[divided_pattern[i]];
@@ -19,7 +19,7 @@ function compileAndLinkPattern(pattern_string, link, tag) {
                 link[divided_pattern[i]] = link[divided_pattern[i]] || {};
                 link[divided_pattern[i]][tag] = matched_variable_count;
                 
-                divided_pattern[i] = "([\\w\\(\\)v&~\\s]+)";
+                divided_pattern[i] = "([\\w\\(\\)v&~]+)";
             }
         } else if (divided_pattern[i] === '(' || divided_pattern[i] === ')' ||
                    divided_pattern[i] === '|'){
@@ -28,6 +28,37 @@ function compileAndLinkPattern(pattern_string, link, tag) {
 
     }
     return new RegExp("^" + divided_pattern.join("") + "$");
+}
+
+
+function parse(s, depth) {
+    var out = '';
+
+    while (depth < s.length) {
+        var c = s[depth];
+        if (c == '(') {
+            var p = parse(s, depth + 1);
+            depth += p.length + 2;
+            if (p.length > 1 &&
+                (depth && /[&^~]|(=>)|(|-)/.test(s[depth-1]) ||
+                 ((depth + p.length + 2) < (s.length - 1) &&
+                  /[&^~]|(=>)|(|-)/.test(s[depth + p.length + 2])))) {
+                console.log(depth + "----");
+                console.log(s[depth-1]);
+                console.log(s[depth + p.length + 2]);
+                p = '(' + p + ')'
+            }
+            out += p; 
+        } else if (c == ')') {
+            if (depth) {
+                return out;
+            }
+        } else {
+            out += c
+            depth++;
+        }
+    }
+    return out;
 }
 
 /* Rule function constructor
@@ -53,7 +84,7 @@ Rule.prototype.compile_and_link = function () {
         }
         //find index for substitution slot in conclusion
         var a_conclusion = this.conclusion.split("");
-        for (var i = 0, len = a_conclusion.length, test_pat = /[A-Za-z]/; i < len; i++) {
+        for (var i = 0, len = a_conclusion.length, test_pat = /[A-Za-uw-z]/; i < len; i++) {
             if (test_pat.test(a_conclusion[i])) {
                 this.sub_index.push(i);
             }
@@ -67,14 +98,15 @@ Rule.prototype.substitute = function (var_map) {
             var cur_pos = this.sub_index[i];
             if (var_map[a_conclusion[cur_pos]]) {
                 a_conclusion[cur_pos] = var_map[a_conclusion[cur_pos]];
-                if (/[v&~]|(=>)(|-)/.test(a_conclusion[cur_pos])) {
+                if (/[v&]|(=>)(|-)/.test(a_conclusion[cur_pos])
+                    && a_conclusion[cur_pos][0] != '(') {
                     a_conclusion[cur_pos] = "(" + a_conclusion[cur_pos] + ")";
                 }
             } else {
                 a_conclusion[this.sub_index[i]] = "<VAR>";
             }
         }
-        return a_conclusion.join("");
+        return parse(a_conclusion, 0);
     };
 
 /* Generate a variable_name -> variable value map
@@ -116,6 +148,11 @@ function matchWithRule(expressions, rule) {
             if (!matched[j]) {
                 var match = rule.premises[j].exec(expr);
                 if (match) {
+                    for (var k = 1; k < match.length; k++) {
+                        match[k] = parse(match[k].split(""), 0);
+                    }
+                    //console.log(rule.premises[j]);
+                    //console.log(match);
                     taggedMatches[rule.premises[j].tag] = match;
                     matched[j] = true;
                     break;

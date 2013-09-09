@@ -12,6 +12,7 @@ var message_box;
 
 function addNewExpression(content, type, rule_name) {
     // Create new expression object and add to expressions list
+    content = beautify(parse(trim(content).split(""), 0));
     var scope_id = cur_scope.join(".");
     var newExpr = new Expression((scope_id ? scope_id + "." : "") + cur_scope_lid,
                                  content, type, rule_name);
