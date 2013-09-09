@@ -127,3 +127,9 @@ ul#rules_box input[type="button"] {
 .footer {
     text-align: right;
 }
+
+.footer .info {
+    float: left;
+    color: #858283;
+    font-size: small;
+}
