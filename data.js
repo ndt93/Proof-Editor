@@ -8,13 +8,13 @@ var builtin_rules = { //Fundamental Logical Rules
                       "vI2": new Rule("Disjunction Intro 2", ["A"], "B v A"),
                       "vE" : new Rule("Disjunction Elim", ["A v B", "A => C", "B => C"], "C"),
                       "~~E": new Rule("Double Negation Ellim", ["~~A"], "A"),
-                      "~I" : new Rule("Negation Intro", ["A => (B v ~B)"], "~A)"),
+                      "~I" : new Rule("Negation Intro", ["A => (B v ~B)"], "~A"),
                       "=>I": new Rule("Implication Intro/ Discharge", ["A |- B"], "A => B"),
                       //Extra Logical Rules
                       "~~I": new Rule("Double Negation Intro", ["A"], "~~A"),
                       "MP" : new Rule("Modus Ponens", ["A", "A => B"], "B"),
                       "MT" : new Rule("Modus Tollens", ["A => B", "~B"], "~A"),
-                      "DS" : new Rule("Disjunctive Syllogism", ["A v B", "~A"], "~B"),
+                      "DS" : new Rule("Disjunctive Syllogism", ["A v B", "~A"], "B"),
                     };
 
 //Constants

@@ -38,15 +38,19 @@ function parse(s, depth) {
         var c = s[depth];
         if (c == '(') {
             var p = parse(s, depth + 1);
-            depth += p.length + 2;
             if (p.length > 1 &&
-                (depth && /[&^~]|(=>)|(|-)/.test(s[depth-1]) ||
-                 ((depth + p.length + 2) < (s.length - 1) &&
-                  /[&^~]|(=>)|(|-)/.test(s[depth + p.length + 2])))) {
+                ( (depth && /[&^~]|(>)|(-)/.test(s[depth-1])) ||
+                  ( ((depth + p.length + 2) < (s.length - 1)) &&
+                    /[&^~]|(>)|(-)/.test(s[depth + p.length + 2]) )
+                )
+               ) {
                 console.log(depth + "----");
                 console.log(s[depth-1]);
                 console.log(s[depth + p.length + 2]);
+                depth += p.length + 2;
                 p = '(' + p + ')'
+            } else {
+                depth += p.length + 2;
             }
             out += p; 
         } else if (c == ')') {
