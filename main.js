@@ -13,14 +13,21 @@ var message_box;
 function addNewExpression(content, type, rule_name) {
     // Create new expression object and add to expressions list
     content = beautify(parse(trim(content).split(""), 0));
+    var prev_scope = cur_scope.slice(0);
+    var prev_line_id = cur_scope_lid;
+    
+    if (rule_name && rule_name.search(builtin_rules["=>I"].name) !== -1) {
+        cur_scope_lid = cur_scope.pop() + 1;
+        cur_area = document.getElementById(getPrefixedScopeId(cur_scope));
+    }
     var scope_id = cur_scope.join(".");
     var newExpr = new Expression((scope_id ? scope_id + "." : "") + cur_scope_lid,
                                  content, type, rule_name);
     expressions_list[EXPR_PREFIX + newExpr.identifier] = newExpr;
     actionsStack.push({ "name": "add_expression",
                         "target": EXPR_PREFIX + newExpr.identifier,
-                        "scope": cur_scope.slice(0),
-                        "line": cur_scope_lid });
+                        "scope": prev_scope,
+                        "line": prev_line_id });
     
     //Create new DOM list item for the expression
     var expr_el = document.createElement("div");
@@ -34,11 +41,6 @@ function addNewExpression(content, type, rule_name) {
     expr_mod.className = EXPR_MODIFIER_CLASS_NAME + " " + type;
     expr_el.appendChild(expr_str);
     expr_el.appendChild(expr_mod);
-    
-    if (rule_name && rule_name.search(builtin_rules["=>I"].name) !== -1) {
-        cur_scope_lid = cur_scope.pop() + 1;
-        cur_area = document.getElementById(getPrefixedScopeId(cur_scope));
-    }
     cur_area.appendChild(expr_el);
     
     //Update current scope, line id in case of assumption

@@ -19,7 +19,7 @@ function compileAndLinkPattern(pattern_string, link, tag) {
                 link[divided_pattern[i]] = link[divided_pattern[i]] || {};
                 link[divided_pattern[i]][tag] = matched_variable_count;
                 
-                divided_pattern[i] = "([\\w\\(\\)v&~]+)";
+                divided_pattern[i] = "([\\w\\(\\)v&~=>\|-]+)";
             }
         } else if (divided_pattern[i] === '(' || divided_pattern[i] === ')' ||
                    divided_pattern[i] === '|'){
@@ -44,9 +44,6 @@ function parse(s, depth) {
                     /[&^~]|(>)|(-)/.test(s[depth + p.length + 2]) )
                 )
                ) {
-                console.log(depth + "----");
-                console.log(s[depth-1]);
-                console.log(s[depth + p.length + 2]);
                 depth += p.length + 2;
                 p = '(' + p + ')'
             } else {
@@ -155,8 +152,6 @@ function matchWithRule(expressions, rule) {
                     for (var k = 1; k < match.length; k++) {
                         match[k] = parse(match[k].split(""), 0);
                     }
-                    //console.log(rule.premises[j]);
-                    //console.log(match);
                     taggedMatches[rule.premises[j].tag] = match;
                     matched[j] = true;
                     break;
