@@ -170,11 +170,11 @@ function matchWithRule(expressions, rule) {
 /* Expression object constructor
  * params: identifier: string;
  */
-function Expression(identifier, content, type, rule_name, parentIds) {
+function Expression(identifier, content, type, rule_name, modifier) {
     this.identifier = identifier;
     this.content = content;
     this.rule_name = rule_name;
-    this.parentIds = parentIds;
+    this.modifier = modifier;
     
     this.scope = identifier.split(".");
     if (type != "Assumption") {

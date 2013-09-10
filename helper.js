@@ -26,3 +26,39 @@ function beautify(string) {
     t_string = t_string.replace(/(.)([v&]|=>)/g, "\$1 \$2");
     return t_string;
 }
+
+
+function getPrefixedScopeId(scope) {
+    return SCOPE_PREFIX + (cur_scope.join(".") || "0");
+}
+
+function getPrefixedExpressionId(scope, line) {
+    var scope_id = scope.join(".");
+    return EXPR_PREFIX + (scope_id ? scope_id + "." : "") + line;
+}
+
+function getModifier(type, rule_name) {
+    return (type && type != "Rule" && type != "Discharge") ?
+            type : rule_name ? rule_name : "";
+}
+
+
+function exportPrintable(actions) {
+    var exportedContent = [];
+    for (var i = 0; i < actions.length; i++) {
+        var action = actions[i];
+        if (action["name"] == "add_expression") {
+            var expression = expressions_list[action["target"]];
+            var line = expression.identifier.slice(-1);
+            var expr_str;
+            expr_str = expression.type == "Assumption" ?
+                        repeat(tab, expression.scope.length - 1) :
+                        repeat(tab, expression.scope.length);
+            expr_str += expression.identifier.slice(-1) + ". " +
+                        expression.content + tab +
+                        getModifier(expression.type, expression.rule_name);
+            exportedContent.push(expr_str);
+        }
+    }
+    return exportedContent.join("\n");
+}

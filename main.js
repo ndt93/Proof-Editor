@@ -37,7 +37,7 @@ function addNewExpression(content, type, rule_name) {
     expr_el.id = EXPR_PREFIX + newExpr.identifier;
     expr_str.innerHTML = newExpr.content;
     expr_str.className = EXPR_STRING_CLASS_NAME;
-    expr_mod.innerHTML = (type && type != "Rule" && type != "Discharge") ? type : rule_name ? rule_name : "";
+    expr_mod.innerHTML = getModifier(type, rule_name);
     expr_mod.className = EXPR_MODIFIER_CLASS_NAME + " " + type;
     expr_el.appendChild(expr_str);
     expr_el.appendChild(expr_mod);
@@ -62,15 +62,6 @@ function addNewExpression(content, type, rule_name) {
     if ((undo_button.disabled)) {
         undo_button.disabled = false;
     }
-}
-
-function getPrefixedScopeId(scope) {
-    return SCOPE_PREFIX + (cur_scope.join(".") || "0");
-}
-
-function getPrefixedExpressionId(scope, line) {
-    var scope_id = scope.join(".");
-    return EXPR_PREFIX + (scope_id ? scope_id + "." : "") + line;
 }
 
 //item: DOM li element
@@ -172,6 +163,7 @@ function setupListeners() {
     var clear_button = document.getElementById("clear");
     var conclude_button = document.getElementById("conclude");
     undo_button = document.getElementById("undo");
+    var print_button = document.getElementById("printable");
     
     var expression = document.getElementById("expression");
     var message = document.getElementById("message");
@@ -250,6 +242,13 @@ function setupListeners() {
             }
         }
     })
+    
+    print_button.addEventListener("click", function () {
+        var proof_print = window.open("", "Proof Editor");
+        proof_print.document.write("<html><head><title>Printable Version</title></head> \
+                                  <body><pre id='content'></pre></body></html>");
+        proof_print.document.getElementById("content").innerHTML = exportPrintable(actionsStack);
+    });
 }
 
 function main() {
