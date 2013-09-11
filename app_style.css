@@ -133,3 +133,32 @@ ul#rules_box input[type="button"] {
     color: #858283;
     font-size: small;
 }
+
+#add_rule_box {
+    position: absolute;
+    top: 35%;
+    left: 27.5%;
+    margin: 0 auto;
+    border: solid thin black;   
+    padding: 20px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    -webkit-box-shadow: 3px 3px 3px #888888;
+    box-shadow: 3px 3px 3px #888888;
+    visibility: hidden;
+}
+
+.new_input {
+    width: 300px;
+}
+
+.note {
+    font-size: small;
+    color: #858283;
+    padding: 0px;
+    margin: 0px;
+}
+
+.right {
+    text-align: right;
+}

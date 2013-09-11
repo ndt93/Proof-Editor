@@ -31,3 +31,4 @@ var INVALID_MATCH_QUALITY = 3;
 var ERROR_MESSAGE_SCOPE= "Some premises cannot be used under current scope";
 var ERROR_MESSAGE_MATCH_QUANTITY = "Invalid number of premises";
 var ERROR_MESSAGE_MATCH_QUALITY = "Premises cannot match selected rule pattern";
+var ERROR_RULE_ALREADY_EXISTS = "Rule identifier already exists";

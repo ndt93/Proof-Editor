@@ -27,6 +27,13 @@ function beautify(string) {
     return t_string;
 }
 
+function map(func, array) {
+    for (var i = 0; i < array.length; i++) {
+        array[i] = func(array[i]);
+    }
+    return array;
+}
+
 
 function getPrefixedScopeId(scope) {
     return SCOPE_PREFIX + (cur_scope.join(".") || "0");

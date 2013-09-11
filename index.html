@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
     <title>Fitch's Style Proof Editor</title>
     <link rel="stylesheet" href="app_style.css">
     <script src="helper.js"></script>
@@ -28,8 +29,35 @@
 		<ol id="scope_0">
 		    
 		</ol>
+		<table id="add_rule_box">
+		    <tr>
+			<td class="right">Identifier</td>
+			<td><input type="text" id="new_id" class="new_input"></td>
+		    </tr>
+		    <tr>
+			<td class="right">Rule Name</td>
+			<td><input type="text" id="new_name" class="new_input"></td>
+		    </tr>
+		    <tr>
+			<td class="right">Premises</td>
+			<td><input type="text" id="new_premises" class="new_input"></td>
+		    </tr>
+		    <tr>
+			<td class="right">Conclusion</td>
+			<td><input type="text" id="new_conclusion" class="new_input"></td>
+		    </tr>
+		    <tr>
+			<td colspan="2" class="note">Use single alphabet except v for variable.
+			Separate premises by comma</td>
+		    </tr>
+		    <tr>
+			<td colspan="2" class="right"><input type="button" id="add" value="Add">
+			    <input type="button" id="cancel_add" value="Cancel"></td>
+		    </tr>
+		</table>
 	    </div>
 	    <div class="footer">
+		<a href="help.html">How to use</a>
 	    <input type="button" id="add_rule" value="Add Rule">
 	    <input type="button" id="printable" value="Printable">
 		<input type="button" id="undo" value="Undo" disabled="true">

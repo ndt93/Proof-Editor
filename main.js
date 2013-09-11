@@ -146,6 +146,15 @@ function undo() {
     }
 }
 
+function addRule(id, rule) {
+    var rule_box = document.getElementById("rules_box");
+    builtin_rules[id] = builtin_rules[id] || rule;
+    var rule_button = document.createElement("input");
+    rule_button.type = "button"; rule_button.value = rule.name;
+    rule_button.id = id;
+    rule_box.appendChild(rule_button);
+}
+
 function init() {
     cur_area = document.getElementById("scope_0");
     var rule_box = document.getElementById("rules_box");
@@ -164,6 +173,9 @@ function setupListeners() {
     var conclude_button = document.getElementById("conclude");
     undo_button = document.getElementById("undo");
     var print_button = document.getElementById("printable");
+    var add_rule_button = document.getElementById("add_rule");
+    var add_button = document.getElementById("add");
+    var cancel_add_button = document.getElementById("cancel_add");
     
     var expression = document.getElementById("expression");
     var message = document.getElementById("message");
@@ -248,6 +260,38 @@ function setupListeners() {
         proof_print.document.write("<html><head><title>Printable Version</title></head> \
                                   <body><pre id='content'></pre></body></html>");
         proof_print.document.getElementById("content").innerHTML = exportPrintable(actionsStack);
+    });
+    
+    add_rule_button.addEventListener("click", function () {
+        var add_rule_box = document.getElementById("add_rule_box");
+        add_rule_box.style.visibility = "visible";
+    });
+    
+    cancel_add_button.addEventListener("click", function () {
+        var add_rule_box = document.getElementById("add_rule_box");
+        add_rule_box.style.visibility = "hidden";
+    });
+    
+    add_button.addEventListener("click", function () {
+        if (builtin_rules[id]) {
+            message_box.innerHTML = ERROR_RULE_ALREADY_EXISTS;
+        } else {
+            var id = document.getElementById("new_id").value;
+            var name = document.getElementById("new_name").value;
+            var premises = document.getElementById("new_premises").value.split(",");
+            var conclusion = document.getElementById("new_conclusion").value;
+            
+            premises = map(trim, premises);
+            for (var i = 0; i < premises.length; i++) {
+                premises[i] = beautify(parse(premises[i].split(""), 0));
+            }
+            conclusion = beautify(parse(trim(conclusion).split(""), 0));
+            var new_rule = new Rule(name, premises, conclusion);
+            addRule(id, new_rule);
+            
+            var add_rule_box = document.getElementById("add_rule_box");
+            add_rule_box.style.visibility = "hidden";
+        }
     });
 }
 
