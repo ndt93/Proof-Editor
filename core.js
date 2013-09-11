@@ -170,14 +170,14 @@ function matchWithRule(expressions, rule) {
 /* Expression object constructor
  * params: identifier: string;
  */
-function Expression(identifier, content, type, rule_name, modifier) {
+function Expression(identifier, content, type, rule_name) {
     this.identifier = identifier;
     this.content = content;
     this.rule_name = rule_name;
-    this.modifier = modifier;
+    this.type = type;
     
     this.scope = identifier.split(".");
-    if (type != "Assumption") {
+    if (this.type != "Assumption") {
         this.scope.pop();
     }
 }
