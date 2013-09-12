@@ -146,6 +146,7 @@ ul#rules_box input[type="button"] {
     -webkit-box-shadow: 3px 3px 3px #888888;
     box-shadow: 3px 3px 3px #888888;
     visibility: hidden;
+    background-color: white;
 }
 
 .new_input {
