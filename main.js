@@ -87,6 +87,7 @@ function resetSelection() {
 function ruleSelected(rule) {
     var dependencies = [];
     var expression_strs = [];
+    
     for (var expr_id in selections_list) {
         expression = selections_list[expr_id];
         if (!expression.canBeSeen(cur_scope)) {
@@ -158,6 +159,7 @@ function addRule(id, rule) {
 function init() {
     cur_area = document.getElementById("scope_0");
     var rule_box = document.getElementById("rules_box");
+    
     for (var rule in builtin_rules) {
         var rule_button = document.createElement("input");
         rule_button.type = "button"; rule_button.value = builtin_rules[rule].name;

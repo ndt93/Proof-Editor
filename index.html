@@ -14,15 +14,20 @@
 	<h3>Fitch's Style Proof Editor</h3>
 	<div class="left_pane">
 	    <div class="header">
-		<form class="input">
-		    <label for="expression" class="expression_area">
-			Proposition <input type="text" id="expression">
-		    </label>
-		    <input type="button" id="conclude" value="Conclude" disabled="true">
-		    <input type="button" id="premise" value="Premise">
-		    <input type="button" id="assumption" value="Assumption">
-		    <input type="button" id="clear" value="Clear">
-		</form>
+		<table class="input_box">
+		    <tr>
+			<td style="text-align: right">Proposition</td>
+			<td style="text-align: right"><input type="text" id="expression"></td>
+		    </tr>
+		    <tr>
+			<td colspan="2" style="text-align: right">
+			    <input type="button" id="conclude" value="Conclude" disabled="true">
+			    <input type="button" id="premise" value="Premise">
+			    <input type="button" id="assumption" value="Assumption">
+			    <input type="button" id="clear" value="Clear">
+			</td>
+		    </tr>
+		</table>
 		<p id="message"></p>
 	    </div>
 	    <div class="body">
