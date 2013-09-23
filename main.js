@@ -243,6 +243,7 @@ function setupListeners() {
         if (e.target.type == "button") {
             var rule = builtin_rules[e.target.id];
             var result = ruleSelected(rule);
+            
             if (result == INVALID_SCOPE) {
                 message_box.innerHTML = ERROR_MESSAGE_SCOPE;
             } else if (result == INVALID_MATCH_QUALITY) {

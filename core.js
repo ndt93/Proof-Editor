@@ -41,9 +41,9 @@ function parse(s, depth) {
             var p = parse(s, depth + 1);
             
             if (p.length > 1 &&
-                ( (depth && /[&v~]|(>)|(-)/.test(s[depth-1])) ||
+                ( (depth && /[&v~]|(=)|(>)|(-)/.test(s[depth-1])) ||
                   ( ((depth + p.length + 2) < (s.length - 1)) &&
-                    /[&v~]|(>)|(-)/.test(s[depth + p.length + 2]) )
+                    /[&v~]|(=)|(>)|(-)/.test(s[depth + p.length + 2]) )
                 )
                ) {
                 depth += p.length + 2;
