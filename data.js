@@ -15,6 +15,7 @@ var builtin_rules = { //Fundamental Logical Rules
                       "MP" : new Rule("Modus Ponens", ["A", "A => B"], "B"),
                       "MT" : new Rule("Modus Tollens", ["A => B", "~B"], "~A"),
                       "DS" : new Rule("Disjunctive Syllogism", ["A v B", "~A"], "B"),
+                      "Iter" : new Rule("Iteration", ["A"], "A")
                     };
 
 //Constants
