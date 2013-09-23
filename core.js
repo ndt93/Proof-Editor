@@ -36,8 +36,10 @@ function parse(s, depth) {
 
     while (depth < s.length) {
         var c = s[depth];
+        
         if (c == '(') {
             var p = parse(s, depth + 1);
+            
             if (p.length > 1 &&
                 ( (depth && /[&v~]|(>)|(-)/.test(s[depth-1])) ||
                   ( ((depth + p.length + 2) < (s.length - 1)) &&
@@ -49,6 +51,7 @@ function parse(s, depth) {
             } else {
                 depth += p.length + 2;
             }
+            
             out += p; 
         } else if (c == ')') {
             if (out.length > 0) {
@@ -142,8 +145,10 @@ function matchWithRule(expressions, rule) {
     if (expressions.length < rule.premises.length) {
         return null;
     }
+    
     var matched = arrayInit(false, expressions.length)
     var taggedMatches = {}; //{premise_tag: [match, matched_variables]}
+    
     for (var i = 0; i < expressions.length; i++) {
         var expr = trim(expressions[i]);
         var j = 0;

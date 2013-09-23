@@ -149,8 +149,9 @@ function undo() {
 
 function addRule(id, rule) {
     var rule_box = document.getElementById("rules_box");
-    builtin_rules[id] = builtin_rules[id] || rule;
     var rule_button = document.createElement("input");
+    
+    builtin_rules[id] = builtin_rules[id] || rule;
     rule_button.type = "button"; rule_button.value = rule.name;
     rule_button.id = id;
     rule_box.appendChild(rule_button);
@@ -162,7 +163,9 @@ function init() {
     
     for (var rule in builtin_rules) {
         var rule_button = document.createElement("input");
-        rule_button.type = "button"; rule_button.value = builtin_rules[rule].name;
+        
+        rule_button.type = "button";
+        rule_button.value = builtin_rules[rule].name;
         rule_button.id = rule;
         rule_box.appendChild(rule_button);
     }
