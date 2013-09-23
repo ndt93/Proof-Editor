@@ -91,7 +91,6 @@ function ruleSelected(rule) {
     for (var expr_id in selections_list) {
         expression = selections_list[expr_id];
         if (!expression.canBeSeen(cur_scope)) {
-            console.log(expression.scope + " " + cur_scope);
             return INVALID_SCOPE;
         }
         expression_strs.push(expression.content);
@@ -171,6 +170,22 @@ function init() {
     }
 }
 
+function resetAll() {
+    var clear_button = document.getElementById("clear");
+    clear_button.dispatchEvent(new Event('click'));
+    
+    cur_scope = [];
+    cur_scope_lid = 1;
+    cur_area = document.getElementById("scope_0");
+
+    expressions_list = {};
+    selections_list = {};
+    actionsStack = [];
+    
+    cur_area.innerHTML = "";
+    undo_button.disabled = true;
+}
+
 function setupListeners() {
     var premise_button = document.getElementById("premise");
     var assumption_button = document.getElementById("assumption");
@@ -181,6 +196,7 @@ function setupListeners() {
     var add_rule_button = document.getElementById("add_rule");
     var add_button = document.getElementById("add");
     var cancel_add_button = document.getElementById("cancel_add");
+    var reset_button = document.getElementById("reset");
     
     var expression = document.getElementById("expression");
     var message = document.getElementById("message");
@@ -232,6 +248,7 @@ function setupListeners() {
     });
     
     undo_button.addEventListener("click", undo);
+    reset_button.addEventListener("click", resetAll);
     
     rules_box.addEventListener("mouseover", function (e) {
         if (e.target.type == "button") {

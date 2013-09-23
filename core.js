@@ -33,34 +33,40 @@ function compileAndLinkPattern(pattern_string, link, tag) {
 
 function parse(s, depth) {
     var out = '';
+    var lowest = "none";
 
     while (depth < s.length) {
         var c = s[depth];
         
         if (c == '(') {
             var p = parse(s, depth + 1);
+            var leftmost = depth && /[&v~]|(=)|(>)|(-)/.exec(s[depth-1]);
+            var rightmost = (depth + p[1].length + 2) < (s.length - 1) &&
+                            /[&v~]|(=)|(>)|(-)/.exec(s[depth + p[1].length + 2]);
             
-            if (p.length > 1 &&
-                ( (depth && /[&v~]|(=)|(>)|(-)/.test(s[depth-1])) ||
-                  ( ((depth + p.length + 2) < (s.length - 1)) &&
-                    /[&v~]|(=)|(>)|(-)/.test(s[depth + p.length + 2]) )
-                )
-               ) {
-                depth += p.length + 2;
-                p = '(' + p + ')'
+            if (p[1].length > 1 && p[0] != "~" &&
+                ((leftmost && comparePrecedence(p[0], leftmost[0]) <= 0) ||
+                 (rightmost && comparePrecedence(p[0], rightmost[0]) <= 0))) {
+                
+                depth += p[1].length + 2;
+                p[1] = '(' + p[1] + ')';
+                
             } else {
-                depth += p.length + 2;
+                depth += p[1].length + 2;
             }
             
-            out += p; 
+            out += p[1];
         } else if (c == ')') {
             if (out.length > 0) {
-                return out;
+                return [lowest, out];
             } else {
                 depth++;
             }
         } else {
-            out += c
+            if (precedence[c] && comparePrecedence(c, lowest) < 0) {
+                lowest = c;
+            }
+            out += c;
             depth++;
         }
     }
@@ -112,7 +118,7 @@ Rule.prototype.substitute = function (var_map) {
                 a_conclusion[this.sub_index[i]] = "<VAR>";
             }
         }
-        return parse(a_conclusion, 0);
+        return parse(a_conclusion.join("").split(""), 0);
     };
 
 /* Generate a variable_name -> variable value map
