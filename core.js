@@ -6,7 +6,7 @@
 function compileAndLinkPattern(pattern_string, link, tag) {
     var trimmed_pattern = trim(pattern_string);
     var divided_pattern = trimmed_pattern.split("");
-    var is_compound = /[&v=>\|-]/.test(trimmed_pattern);
+    var is_compound = /[&v=>]/.test(trimmed_pattern);
     
     var matched_variable_count = 0;
     var variable_ids = {};
