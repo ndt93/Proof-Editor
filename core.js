@@ -6,6 +6,7 @@
 function compileAndLinkPattern(pattern_string, link, tag) {
     var trimmed_pattern = trim(pattern_string);
     var divided_pattern = trimmed_pattern.split("");
+    var is_compound = /[&v=>\|-]/.test(trimmed_pattern);
     
     var matched_variable_count = 0;
     var variable_ids = {};
@@ -19,7 +20,11 @@ function compileAndLinkPattern(pattern_string, link, tag) {
                 link[divided_pattern[i]] = link[divided_pattern[i]] || {};
                 link[divided_pattern[i]][tag] = matched_variable_count;
                 
-                divided_pattern[i] = "([\\w\\(\\)v&~=>\|-]+)";
+                if (!is_compound) {
+                    divided_pattern[i] = "([\\w\\(\\)v&~=>\|-]+)";
+                } else {
+                    divided_pattern[i] = "([~\\w]+|\\([\\w\\(\\)v&~=>\|-]+\\))";
+                }
             }
         } else if (divided_pattern[i] === '(' || divided_pattern[i] === ')' ||
                    divided_pattern[i] === '|'){
