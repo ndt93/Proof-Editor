@@ -19,7 +19,7 @@ function compileAndLinkPattern(pattern_string, link, tag) {
                 link[divided_pattern[i]] = link[divided_pattern[i]] || {};
                 link[divided_pattern[i]][tag] = matched_variable_count;
                 
-                divided_pattern[i] = "([\\w\\(\\)v&~=>\|-]+)";
+                divided_pattern[i] = "([~\\w]+|\\([\\w\\(\\)v&~=>\|-]+\\))";
             }
         } else if (divided_pattern[i] === '(' || divided_pattern[i] === ')' ||
                    divided_pattern[i] === '|'){
@@ -41,7 +41,7 @@ function parse(s, depth) {
         if (c == '(') {
             var p = parse(s, depth + 1);
             var leftmost = depth && /[&v~]|(=)|(>)|(-)/.exec(s[depth-1]);
-            var rightmost = (depth + p[1].length + 2) < (s.length - 1) &&
+            var rightmost = p[1] && (depth + p[1].length + 2) < (s.length - 1) &&
                             /[&v~]|(=)|(>)|(-)/.exec(s[depth + p[1].length + 2]);
             
             if (p[1].length > 1 && p[0] != "~" &&

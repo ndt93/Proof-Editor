@@ -70,7 +70,7 @@ function exportPrintable(actions) {
     return exportedContent.join("\n");
 }
 
-var precedence = {"none": 4, ">": 1, "=": 1, "&": 2, "v": 2, "~": 3};
+var precedence = {"none": 4, ">": 2, "=": 2, "&": 2, "v": 2, "~": 3};
 function comparePrecedence(operator1, operator2) {
     var pre1 = precedence[operator1], pre2 = precedence[operator2];
     if (pre1 < pre2) {
