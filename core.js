@@ -19,7 +19,7 @@ function compileAndLinkPattern(pattern_string, link, tag) {
                 link[divided_pattern[i]] = link[divided_pattern[i]] || {};
                 link[divided_pattern[i]][tag] = matched_variable_count;
                 
-                divided_pattern[i] = "([~\\w]+|\\([\\w\\(\\)v&~=>\|-]+\\))";
+                divided_pattern[i] = "([\\w\\(\\)v&~=>\|-]+)";
             }
         } else if (divided_pattern[i] === '(' || divided_pattern[i] === ')' ||
                    divided_pattern[i] === '|'){
