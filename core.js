@@ -23,7 +23,7 @@ function compileAndLinkPattern(pattern_string, link, tag) {
                 if (!is_compound) {
                     divided_pattern[i] = "([\\w\\(\\)v&~=>\|-]+)";
                 } else {
-                    divided_pattern[i] = "([~\\w]+|\\([\\w\\(\\)v&~=>\|-]+\\))";
+                    divided_pattern[i] = "([~\\w]+|~*\\([\\w\\(\\)v&~=>\|-]+\\))";
                 }
             }
         } else if (divided_pattern[i] === '(' || divided_pattern[i] === ')' ||
